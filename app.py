@@ -40,18 +40,13 @@ def upload_file():
         with open(file_path, 'rb') as f:
             files = {'file': f}
             response = requests.post(PIXELDRAIN_API_URL, files=files)
-            print(response.json())
+        result = response.json()
         
         # Check if the upload was successful
-        if response.status_code == 200:
-            result = response.json()
-            if result['success']:
-                return f'File uploaded successfully to PixelDrain! ID: {result["id"]}'
-            else:
-                return f'Failed to upload file to PixelDrain: {result["message"]}'
+        if result['success']:
+            return f'File uploaded successfully to PixelDrain! ID: {result["id"]}'
         else:
-            result = response.json()
-            return f'Failed to upload file to PixelDrain: {response.status_code}'
+            return f'Failed to upload file to PixelDrain: {response.status_code} \n {str(result)}'
 
 if __name__ == '__main__':
     app.run(debug=True)
