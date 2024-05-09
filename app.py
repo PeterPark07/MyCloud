@@ -2,6 +2,7 @@ import os
 from flask import Flask, request, render_template, redirect
 from database import log
 import time
+import requests
 
 app = Flask(__name__)
 
