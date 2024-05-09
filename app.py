@@ -14,6 +14,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 
 # PixelDrain API endpoint
 PIXELDRAIN_API_URL = 'https://pixeldrain.com/api/file'
+PIXELDRAIN_API_INFO_URL = 'https://pixeldrain.com/api/file/{}/info'
 
 @app.route('/')
 def index():
@@ -44,13 +45,20 @@ def upload_file():
         
         # Check if the upload was successful
         if result['success']:
+            file_id = result['id']
+            info_response = requests.get(PIXELDRAIN_API_INFO_URL.format(file_id))
+            info_result = info_response.json()
+            print(info_result)
+
+
+            
             log_entry = {
-                "file_id": result["id"],
+                "file_id": file_id,
                 "file_name": filename,
                 "timestamp": time.time(),
             }
             log.insert_one(log_entry)
-            return f'File uploaded successfully to PixelDrain! https://pixeldrain.com/u/{result["id"]}'
+            return f'File uploaded successfully to PixelDrain! https://pixeldrain.com/u/{file_id}'
         else:
             return f'Failed to upload file to PixelDrain: {response.status_code} \n {str(result)}'
 
