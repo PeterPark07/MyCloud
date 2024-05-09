@@ -13,6 +13,7 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
 # PixelDrain API endpoint
+PIXELDRAIN_API_KEY = 'd224aab0-a8d3-4231-a580-ff8207e6cf42'
 PIXELDRAIN_API_URL = 'https://pixeldrain.com/api/file'
 PIXELDRAIN_API_INFO_URL = 'https://pixeldrain.com/api/file/{}/info'
 
@@ -42,8 +43,10 @@ def upload_file():
         # Upload the file to PixelDrain
         with open(file_path, 'rb') as f:
             files = {'file': f}
-            response = requests.post(PIXELDRAIN_API_URL, files=files)
+            headers = {'Authorization': 'Basic ' + PIXELDRAIN_API_KEY}
+            response = requests.post(PIXELDRAIN_API_URL, files=files, headers=headers)
         result = response.json()
+        print(result)
         
         # Check if the upload was successful
         if result['success']:
