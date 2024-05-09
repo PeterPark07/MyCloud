@@ -44,7 +44,13 @@ def upload_file():
         
         # Check if the upload was successful
         if result['success']:
-            return f'File uploaded successfully to PixelDrain! ID: {result["id"]}'
+            log_entry = {
+                "file_id": result["id"],
+                "file_name": filename,
+                "timestamp": time.time(),
+            }
+            log.insert_one(log_entry)
+            return f'File uploaded successfully to PixelDrain! https://pixeldrain.com/u/{result["id"]}'
         else:
             return f'Failed to upload file to PixelDrain: {response.status_code} \n {str(result)}'
 
