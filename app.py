@@ -8,6 +8,12 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'  # Directory to save uploaded file
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
+
+# PixelDrain API endpoint
+PIXELDRAIN_API_URL = 'https://pixeldrain.com/api/file'
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -27,5 +33,19 @@ def upload_file():
     if file:
         # Save the uploaded file to the uploads folder
         filename = file.filename
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for('index'))
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(file_path)
+        # Upload the file to PixelDrain
+        with open(file_path, 'rb') as f:
+            files = {'file': f}
+            response = requests.post(PIXELDRAIN_API_URL, files=files)
+        
+        # Check if the upload was successful
+        if response.status_code == 200:
+            result = response.json()
+            if result['success']:
+                return f'File uploaded successfully to PixelDrain! ID: {result["id"]}'
+            else:
+                return f'Failed to upload file to PixelDrain: {result["message"]}'
+        else:
+            return 'Failed to upload file to PixelDrain: HTTP Error'
