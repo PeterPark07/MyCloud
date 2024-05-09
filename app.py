@@ -40,6 +40,7 @@ def upload_file():
         with open(file_path, 'rb') as f:
             files = {'file': f}
             response = requests.post(PIXELDRAIN_API_URL, files=files)
+            print(response)
         
         # Check if the upload was successful
         if response.status_code == 200:
