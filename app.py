@@ -49,7 +49,8 @@ def upload_file():
             else:
                 return f'Failed to upload file to PixelDrain: {result["message"]}'
         else:
-            return 'Failed to upload file to PixelDrain: HTTP Error'
+            result = response.json()
+            return f'Failed to upload file to PixelDrain: {response.status_code} \n {result['message']}'
 
 if __name__ == '__main__':
     app.run(debug=True)
