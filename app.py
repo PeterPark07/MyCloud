@@ -58,7 +58,7 @@ def upload_file():
                 "timestamp": info_result["date_upload"]
             }
             log.insert_one(log_entry)
-            return f'File uploaded successfully.'
+            return redirect('/')
         else:
             return f'Failed to upload file to PixelDrain: {response.status_code} \n {str(result)}'
 
