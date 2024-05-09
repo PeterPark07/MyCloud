@@ -18,7 +18,9 @@ PIXELDRAIN_API_INFO_URL = 'https://pixeldrain.com/api/file/{}/info'
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Retrieve all files from the collection
+    files = log.find()
+    return render_template('index.html', files=files)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
