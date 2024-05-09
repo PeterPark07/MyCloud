@@ -47,18 +47,16 @@ def upload_file():
         if result['success']:
             file_id = result['id']
             info_response = requests.get(PIXELDRAIN_API_INFO_URL.format(file_id))
-            info_result = info_response.json()
-            print(info_result)
-
-
-            
+            info_result = info_response.json()            
             log_entry = {
                 "file_id": file_id,
                 "file_name": filename,
-                "timestamp": time.time(),
+                "file_size": info_result["size"],
+                "mime_type": info_result["mime_type"],
+                "timestamp": info_result["date_upload"]
             }
             log.insert_one(log_entry)
-            return f'File uploaded successfully to PixelDrain! https://pixeldrain.com/u/{file_id}'
+            return f'File uploaded successfully.'
         else:
             return f'Failed to upload file to PixelDrain: {response.status_code} \n {str(result)}'
 
