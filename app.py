@@ -63,6 +63,8 @@ def upload_file():
 
         result = response.json()
         print(result)
+        # Delete the file from the server after uploading
+        os.remove(file_path)
         
         # Check if the upload was successful
         if result['success']:
