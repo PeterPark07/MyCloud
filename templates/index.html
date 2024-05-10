@@ -77,7 +77,10 @@
         <p id="fileId"></p>
     </div>
     <p id="responseJson" style="display: none;"></p>
+
+
     <script>
+
         function uploadFile() {
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
@@ -85,9 +88,14 @@
             const formData = new FormData();
             formData.append('file', file);
 
+            const apiKey = 'your_api_key_here'; // Replace 'your_api_key_here' with your actual API key
+        
             fetch('https://pixeldrain.com/api/file', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                headers: {
+                    'Authorization': 'Basic ' + btoa(':' + apiKey)
+                }
             })
             .then(response => response.json())
             .then(data => {
