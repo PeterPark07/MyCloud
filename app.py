@@ -73,7 +73,7 @@ def upload_file():
             info_result = info_response.json()            
             log_entry = {
                 "file_id": file_id,
-                "file_name": filename,
+                "file_name": info_result["name"],
                 "file_size": info_result["size"],
                 "mime_type": info_result["mime_type"],
                 "timestamp": info_result["date_upload"]
@@ -82,6 +82,23 @@ def upload_file():
             return redirect('/')
         else:
             return f'Failed to upload file to PixelDrain: {response.status_code} \n {str(result)}'
+
+@app.route('/log', methods=['POST'])
+def log_file():
+    file_id = request.data.decode('utf-8')
+    info_response = requests.get(PIXELDRAIN_API_INFO_URL.format(file_id))
+    info_result = info_response.json()            
+    log_entry = {
+        "file_id": file_id,
+        "file_name": info_result["name"],
+        "file_size": info_result["size"],
+        "mime_type": info_result["mime_type"],
+        "timestamp": info_result["date_upload"]
+    }
+    log.insert_one(log_entry)
+    return redirect('/')
+
+
 
 @app.route('/delete/file/<file_id>', methods=['POST'])
 def delete_file(file_id):
