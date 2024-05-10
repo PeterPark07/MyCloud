@@ -62,9 +62,57 @@
     </table>
     <br>
     <h2>Upload a File</h2>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="Upload">
-    </form>
+    <input type="file" id="fileInput">
+    <button onclick="uploadFile()">Upload</button>
+
+<script>
+    function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        fetch('https://pixeldrain.com/api/file', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Authorization': 'Basic ' + btoa(':' + PIXELDRAIN_API_KEY)
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const fileId = data.id;
+                // Send file ID to Flask app
+                sendFileIdToFlask(fileId);
+            } else {
+                console.error('Failed to upload file:', data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error);
+        });
+    }
+
+    function sendFileIdToFlask(fileId) {
+        fetch('/upload', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ file_id: fileId })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to send file ID to Flask app');
+            }
+            // Handle success if needed
+        })
+        .catch(error => {
+            console.error('Error sending file ID to Flask app:', error);
+        });
+    }
+</script>
 </body>
 </html>
