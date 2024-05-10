@@ -83,7 +83,7 @@ def upload_file():
         else:
             return f'Failed to upload file to PixelDrain: {response.status_code} \n {str(result)}'
 
-@app.route('/delete/file/<file_id>', methods=['DELETE'])
+@app.route('/delete/file/<file_id>', methods=['POST'])
 def delete_file(file_id):
     # Check if the file exists in the database
     file_entry = log.find_one({"file_id": file_id})
