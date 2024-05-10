@@ -83,5 +83,23 @@ def upload_file():
         else:
             return f'Failed to upload file to PixelDrain: {response.status_code} \n {str(result)}'
 
+@app.route('/delete/file/<file_id>', methods=['DELETE'])
+def delete_file(file_id):
+    # Check if the file exists in the database
+    file_entry = log.find_one({"file_id": file_id})
+    if file_entry:
+        # Set the Authorization header with PixelDrain API key
+        headers = {'Authorization': 'Basic ' + encoded_auth_string}
+        # Send DELETE request to PixelDrain API
+        delete_response = requests.delete(PIXELDRAIN_API_URL + '/' + file_id, headers=headers)
+        delete_result = delete_response.json()
+        if delete_result['success']:
+            # Delete the file entry from the database
+            log.delete_one({"file_id": file_id})
+            return redirect('/')
+        else:
+            return f'Failed to delete file {delete_response.status_code} \n {str(delete_result)}'
+
+
 if __name__ == '__main__':
     app.run(debug=True)
