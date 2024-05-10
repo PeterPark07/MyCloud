@@ -4,6 +4,12 @@ from database import log
 import time
 import requests
 
+import base64
+
+
+
+
+
 app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'  # Directory to save uploaded file
@@ -16,6 +22,12 @@ if not os.path.exists(app.config['UPLOAD_FOLDER']):
 PIXELDRAIN_API_KEY = 'd224aab0-a8d3-4231-a580-ff8207e6cf42'
 PIXELDRAIN_API_URL = 'https://pixeldrain.com/api/file'
 PIXELDRAIN_API_INFO_URL = 'https://pixeldrain.com/api/file/{}/info'
+
+# Encode the API key to Base64
+auth_string = ":" + PIXELDRAIN_API_KEY
+encoded_auth_string = base64.b64encode(auth_string.encode()).decode()
+
+
 
 @app.route('/')
 def index():
@@ -43,8 +55,12 @@ def upload_file():
         # Upload the file to PixelDrain
         with open(file_path, 'rb') as f:
             files = {'file': f}
-            headers = {'Authorization': 'Basic ' + PIXELDRAIN_API_KEY}
+            # Set the Authorization header
+            headers = {'Authorization': 'Basic ' + encoded_auth_string}
+
+            # Send the request with the updated headers
             response = requests.post(PIXELDRAIN_API_URL, files=files, headers=headers)
+
         result = response.json()
         print(result)
         
