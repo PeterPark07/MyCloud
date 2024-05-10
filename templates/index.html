@@ -87,10 +87,7 @@
 
             fetch('https://pixeldrain.com/api/file', {
                 method: 'POST',
-                body: formData,
-                headers: {
-                    'Authorization': 'Basic ' + btoa(':' + '{{ pixel }}')
-                }
+                body: formData
             })
             .then(response => response.json())
             .then(data => {
@@ -122,7 +119,6 @@
             responseJson.innerText = JSON.stringify(response, null, 2);
             responseJson.style.display = 'block';
         }
-    </script>
     </script>
 </body>
 </html>
