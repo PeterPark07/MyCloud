@@ -93,7 +93,7 @@
             fetch('https://pixeldrain.com/api/file', {
                 method: 'POST',
                 body: formData,
-                headers: {
+                headers: new Headers({
                     'Authorization': 'Basic ' + btoa(':' + apiKey)
                 }
             })
