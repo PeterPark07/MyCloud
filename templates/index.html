@@ -89,7 +89,7 @@
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'Authorization': 'Basic ' + btoa(':' + PIXELDRAIN_API_KEY)
+                    'Authorization': 'Basic ' + btoa(':' + pixel)
                 }
             })
             .then(response => response.json())
