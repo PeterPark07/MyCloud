@@ -105,6 +105,7 @@
                     const fileId = data.id;
                     showConfirmation(fileId);
                 } else {
+                    alert('Failed to upload file: ' + data.message);
                     console.error('Failed to upload file:', data.message);
                 }
             })
