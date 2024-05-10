@@ -101,6 +101,7 @@
                 if (data.success) {
                     const fileId = data.id;
                     showConfirmation(fileId);
+                    sendFileIdToLog(fileId);
                 } else {
                     alert('Failed to upload file: ' + data.message);
                     console.error('Failed to upload file:', data.message);
