@@ -96,6 +96,7 @@ def log_file():
         "timestamp": info_result["date_upload"]
     }
     log.insert_one(log_entry)
+    time.sleep(1)
     return redirect('/')
 
 
