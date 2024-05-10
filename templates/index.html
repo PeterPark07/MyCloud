@@ -29,6 +29,11 @@
         .delete-btn {
             background-color: #f44336;
         }
+        /* Styles for confirmation page */
+        .confirmation {
+            text-align: center;
+            margin-top: 50px;
+        }
     </style>
 </head>
 <body>
@@ -61,58 +66,55 @@
         </tbody>
     </table>
     <br>
+
     <h2>Upload a File</h2>
     <input type="file" id="fileInput">
     <button onclick="uploadFile()">Upload</button>
 
-<script>
-    function uploadFile() {
-        const fileInput = document.getElementById('fileInput');
-        const file = fileInput.files[0];
+    <div class="confirmation" style="display: none;">
+        <h3>File Uploaded Successfully!</h3>
+        <p>The file has been uploaded with the following ID:</p>
+        <p id="fileId"></p>
+    </div>
 
-        const formData = new FormData();
-        formData.append('file', file);
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
 
-        fetch('https://pixeldrain.com/api/file', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Authorization': 'Basic ' + btoa(':' + pixel)
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const fileId = data.id;
-                // Send file ID to Flask app
-                sendFileIdToFlask(fileId);
-            } else {
-                console.error('Failed to upload file:', data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error uploading file:', error);
-        });
-    }
+            const formData = new FormData();
+            formData.append('file', file);
 
-    function sendFileIdToFlask(fileId) {
-        fetch('/upload', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ file_id: fileId })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to send file ID to Flask app');
-            }
-            // Handle success if needed
-        })
-        .catch(error => {
-            console.error('Error sending file ID to Flask app:', error);
-        });
-    }
-</script>
+            fetch('https://pixeldrain.com/api/file', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Authorization': 'Basic ' + btoa(':' + PIXELDRAIN_API_KEY)
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const fileId = data.id;
+                    showConfirmation(fileId);
+                } else {
+                    console.error('Failed to upload file:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading file:', error);
+            });
+        }
+
+        function showConfirmation(fileId) {
+            // Hide file upload form
+            document.getElementById('fileInput').style.display = 'none';
+            document.querySelector('button').style.display = 'none';
+            // Show confirmation message with file ID
+            const confirmationDiv = document.querySelector('.confirmation');
+            confirmationDiv.style.display = 'block';
+            document.getElementById('fileId').innerText = fileId;
+        }
+    </script>
 </body>
 </html>
