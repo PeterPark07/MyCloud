@@ -125,6 +125,24 @@
             responseJson.innerText = JSON.stringify(response, null, 2);
             responseJson.style.display = 'block';
         }
+
+        function sendFileIdToLog(fileId) {
+            fetch('/log', {
+                method: 'POST',
+                body: fileId
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to send file ID to log route');
+                }
+                // Handle success if needed
+            })
+            .catch(error => {
+                console.error('Error sending file ID to log route:', error);
+            });
+        }
+
+
     </script>
 </body>
 </html>
