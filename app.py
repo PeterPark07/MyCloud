@@ -86,10 +86,8 @@ def upload_file():
 @app.route('/log', methods=['POST'])
 def log_file():
     file_id = request.data.decode('utf-8')
-    print(file_id)
     info_response = requests.get(PIXELDRAIN_API_INFO_URL.format(file_id))
     info_result = info_response.json()            
-    print(info_result)
     log_entry = {
         "file_id": file_id,
         "file_name": info_result["name"],
