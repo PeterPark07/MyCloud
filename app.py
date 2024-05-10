@@ -33,7 +33,7 @@ encoded_auth_string = base64.b64encode(auth_string.encode()).decode()
 def index():
     # Retrieve all files from the collection
     files = log.find()
-    return render_template('index.html', files=files, pixel=PIXELDRAIN_API_KEY)
+    return render_template('index.html', files=files)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
