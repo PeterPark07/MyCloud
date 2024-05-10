@@ -76,7 +76,7 @@
         <p>The file has been uploaded with the following ID:</p>
         <p id="fileId"></p>
     </div>
-
+    <p id="responseJson" style="display: none;"></p>
     <script>
         function uploadFile() {
             const fileInput = document.getElementById('fileInput');
@@ -94,6 +94,8 @@
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data); // Print the response JSON in the console
+                displayResponse(data);
                 if (data.success) {
                     const fileId = data.id;
                     showConfirmation(fileId);
@@ -115,6 +117,12 @@
             confirmationDiv.style.display = 'block';
             document.getElementById('fileId').innerText = fileId;
         }
+        function displayResponse(response) {
+            const responseJson = document.getElementById('responseJson');
+            responseJson.innerText = JSON.stringify(response, null, 2);
+            responseJson.style.display = 'block';
+        }
+    </script>
     </script>
 </body>
 </html>
