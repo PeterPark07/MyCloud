@@ -90,18 +90,10 @@
         
             const formData = new FormData();
             formData.append('file', file);
-
-            const apiKey = 'd224aab0-a8d3-4231-a580-ff8207e6cf42';
-            
-            const headers = new Headers();
-            headers.append('Authorization', 'Basic ' + btoa(':' + apiKey)); // Add API key to headers
         
             fetch('https://pixeldrain.com/api/file', {
                     method: 'POST',
-                    body: formData,
-                    headers: {
-                        "Authorization": "Basic " + btoa(":" + apiKey),
-                    }
+                    body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
